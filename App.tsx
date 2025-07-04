@@ -1,8 +1,9 @@
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Button } from "react-native";
+import { useState } from "react";
 import ListItem from "./components/ListItem";
 
 export default function App() {
-  const items = [
+  const [items, setItems] = useState([
     {
       id: "0",
       title: "Heartworm medication",
@@ -15,10 +16,16 @@ export default function App() {
       id: "2",
       title: "Cleaned kitchen grout",
     },
-  ];
+  ]);
 
   return (
     <View style={styles.container}>
+      <Button
+        title="Add item"
+        onPress={() =>
+          setItems([...items, { id: crypto.randomUUID(), title: "New item" }])
+        }
+      />
       <FlatList
         data={items}
         renderItem={({ item }) => <ListItem itemText={item.title} />}
