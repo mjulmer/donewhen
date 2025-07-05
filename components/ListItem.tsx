@@ -1,9 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 
-export default function App({ itemText }: { itemText: string }) {
+export default function App({
+  itemText,
+  itemDate,
+  markCompleted,
+}: {
+  itemText: string;
+  itemDate: Date | undefined;
+  markCompleted: Function;
+}) {
+  const dateView = itemDate ? <Text>{itemDate.toDateString()}</Text> : null;
   return (
     <View style={styles.container}>
+      <Button title="X" onPress={() => markCompleted()} />
       <Text>{itemText}</Text>
+      {dateView}
     </View>
   );
 }
