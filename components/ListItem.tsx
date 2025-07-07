@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text, View } from "react-native";
 
-export default function App({
+export default function ListItem({
   itemText,
   itemDate,
   markCompleted,
