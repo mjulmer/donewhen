@@ -1,6 +1,8 @@
-import { StyleSheet, View, FlatList, Button } from "react-native";
 import { useState } from "react";
+import { StyleSheet, FlatList, Button } from "react-native";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import ListItem from "./components/ListItem";
+import NewItemModal from "./components/NewItemModal";
 
 interface ItemData {
   id: string;
@@ -9,6 +11,7 @@ interface ItemData {
 }
 
 export default function App() {
+  const [modalVisible, setModalVisible] = useState(false);
   const [items, setItems] = useState<Array<ItemData>>([
     {
       id: "0",
@@ -39,29 +42,32 @@ export default function App() {
     );
   }
 
+  function addNewItem(title: string) {
+    setItems([...items, { id: crypto.randomUUID(), title: title, dates: [] }]);
+  }
+
   return (
-    <View style={styles.container}>
-      <Button
-        title="Add item"
-        onPress={() =>
-          setItems([
-            ...items,
-            { id: crypto.randomUUID(), title: "New item", dates: [] },
-          ])
-        }
-      />
-      <FlatList
-        data={items}
-        renderItem={({ item }) => (
-          <ListItem
-            itemText={item.title}
-            itemDate={item.dates.at(-1)}
-            markCompleted={() => markCompleted(item.id)}
-          />
-        )}
-        keyExtractor={(item) => item.id}
-      />
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <NewItemModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          addNewItem={addNewItem}
+        />
+        <Button title="Add item" onPress={() => setModalVisible(true)} />
+        <FlatList
+          data={items}
+          renderItem={({ item }) => (
+            <ListItem
+              itemText={item.title}
+              itemDate={item.dates.at(-1)}
+              markCompleted={() => markCompleted(item.id)}
+            />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
