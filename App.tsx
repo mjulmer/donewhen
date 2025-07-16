@@ -11,6 +11,12 @@ export default function App() {
   const [tasks, setTasks] = useState<{ [id: string]: ItemData }>({});
   const [storageManager, _] = useState(new StorageManager(setTasks));
 
+  useEffect(() => {
+    if (Object.keys(tasks).length === 0) {
+      storageManager.getTasks();
+    }
+  }, [tasks]);
+
   // This helper function is only needed until I add categories. Right now,
   // all tasks are rendered in once list, and all tasks come as an object.
   // When categories are rendered, the list of task IDs will be passed to
@@ -21,12 +27,6 @@ export default function App() {
       taskArray.push({ ...tasks[id], id: id });
     }
     return taskArray;
-  }
-
-  // This is also temporary -- once the tasks are set from an effect,
-  // we can rely on that to load them.
-  if (Object.keys(tasks).length === 0) {
-    storageManager.setTasks();
   }
 
   return (
