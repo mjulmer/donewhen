@@ -35,7 +35,7 @@ export default function App() {
         <NewItemModal
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-          addNewItem={storageManager.addNewItem}
+          addNewItem={(taskName: string) => storageManager.addNewItem(taskName)}
         />
         <Button title="Add item" onPress={() => setModalVisible(true)} />
         <FlatList
