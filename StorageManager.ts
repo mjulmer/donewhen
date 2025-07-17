@@ -22,14 +22,14 @@ class StorageManager {
     { catId: "catId0", catTitle: "Uncategorized", taskIds: ["0", "1", "2"] },
   ];
 
-  #setTasks;
+  #setTasksInUi;
 
   constructor(setTasks: (input: { [id: string]: ItemData }) => void) {
-    this.#setTasks = setTasks;
+    this.#setTasksInUi = () => setTasks({ ...this.#tasks });
   }
 
   setTasksInUiAndStorage() {
-    this.#setTasks(this.#tasks);
+    this.#setTasksInUi();
     this.#asyncStorageManager.storeTaskObject(this.#tasks);
   }
 
@@ -37,7 +37,7 @@ class StorageManager {
 
   async getTasks() {
     if (this.#fetchedDataFromStorage) {
-      this.#setTasks(this.#tasks);
+      this.#setTasksInUi();
       return;
     }
     this.#asyncStorageManager
@@ -47,7 +47,7 @@ class StorageManager {
           throw new Error();
         }
         this.#tasks = tasksFromStorage;
-        this.#setTasks(this.#tasks);
+        this.#setTasksInUi();
         this.#fetchedDataFromStorage = true;
       })
       .catch((err) => console.error("Issue reading tasks from local storage."));
